@@ -1,0 +1,27 @@
+{
+  "name": "fritz-thermo-connect",
+  "version": "1.0.0",
+  "description": "Synchronize Netatmo weather station temperature readings with Fritz DECT 302 thermostat offset settings",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "tsx -r dotenv/config src/index.ts"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "dotenv": "^17.2.3",
+    "prettier": "^3.6.2",
+    "tsx": "^4.7.0"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "semi": false,
+    "useTabs": false,
+    "tabWidth": 2,
+    "printWidth": 100,
+    "arrowParens": "avoid"
+  }
+}
