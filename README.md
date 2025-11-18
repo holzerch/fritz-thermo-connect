@@ -14,9 +14,9 @@ This script:
 
 ThingSpeak fields (in current implementation):
 - field1: Offset for thermostat 1
-- field2: Measured temperature (derived) for thermostat 1
+- field2: Measured temperature at thermostat 1
 - field3: Offset for thermostat 2
-- field4: Measured temperature (derived) for thermostat 2
+- field4: Measured temperature at thermostat 2
 - field5: Netatmo reference temperature
 (Additional fields are unused; adjust code if you add more devices.)
 
