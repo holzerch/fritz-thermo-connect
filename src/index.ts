@@ -18,9 +18,9 @@ async function main(): Promise<void> {
   const measurements: number[] = []
   for (const deviceId of devices) {
     const info = await fritz.getThermostatInfo(deviceId)
-    const newOffset = Math.min(roundToHalf(temp - info.measuredTemp), 0)
+    const newOffset = info.active ? Math.min(roundToHalf(temp - info.measuredTemp), 0) : 0
     measurements.push(newOffset, info.adaptedTemp)
-    if (info.active && newOffset !== info.offset) {
+    if (newOffset !== info.offset) {
       await fritz.setThermostatOffset(deviceId, newOffset)
       console.log(`Change offset for "${info.name}" from ${info.offset}°C to ${newOffset}°C`)
     }
