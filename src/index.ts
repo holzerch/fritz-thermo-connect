@@ -1,8 +1,6 @@
 import { NetatmoClient } from './netatmo'
-import { FritzBoxClient } from './fritzbox'
+import { FritzBoxClient, ThermostatInfo } from './fritzbox'
 import { ThingSpeakClient } from './thingspeak'
-
-const roundToHalf = (value: number): number => Math.round(value * 2) / 2
 
 async function main(): Promise<void> {
   const netatmo = new NetatmoClient()
@@ -18,7 +16,7 @@ async function main(): Promise<void> {
   const measurements: number[] = []
   for (const deviceId of devices) {
     const info = await fritz.getThermostatInfo(deviceId)
-    const newOffset = info.active ? Math.min(roundToHalf(temp - info.measuredTemp), 0) : 0
+    const newOffset = computeOffset(info, temp)
     measurements.push(newOffset, info.adaptedTemp)
     if (newOffset !== info.offset) {
       await fritz.setThermostatOffset(deviceId, newOffset)
@@ -28,5 +26,9 @@ async function main(): Promise<void> {
   measurements.push(temp)
   await thingSpeak.publishData(measurements)
 }
+
+const roundToHalf = (value: number): number => Math.round(value * 2) / 2
+const computeOffset = (info: ThermostatInfo, roomTemp: number): number =>
+  info.active ? Math.max(Math.min(roundToHalf(roomTemp - info.measuredTemp), 0), -3) : 0
 
 main().catch(error => console.error(error))
