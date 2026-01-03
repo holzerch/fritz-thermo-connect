@@ -12,7 +12,7 @@ export class NetatmoClient {
     this.refreshToken = process.env.NETATMO_REFRESH_TOKEN
   }
 
-  async getTemperature(): Promise<number | undefined> {
+  async getTemperature(): Promise<number> {
     await this.ensureAuthenticated()
 
     const response = await fetch(`${this.baseUrl}/api/getstationsdata`, {
@@ -29,7 +29,10 @@ export class NetatmoClient {
 
     const data = await response.json()
     const device = data.body.devices.find(d => d.reachable === true && d.type === 'NAMain')
-    return device?.dashboard_data.Temperature
+    if (!device?.dashboard_data.Temperature) {
+      throw new Error('No Netatmo device with temperature data found')
+    }
+    return device.dashboard_data.Temperature
   }
 
   private async authenticate(): Promise<void> {
